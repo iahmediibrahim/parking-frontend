@@ -28,8 +28,9 @@ export const api = {
 	login: async (username: string, password: string) => {
 		const response = await fetch(`${API_BASE_URL}/auth/login`, {
 			method: 'POST',
-			headers: getAuthHeaders() as Record<string, string>,
-
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify({ username, password }),
 		})
 
@@ -143,8 +144,9 @@ export const api = {
 	createRushHour: async (data: Omit<RushHour, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/rush-hours`, {
 			method: 'POST',
-			headers: getAuthHeaders() as Record<string, string>,
-
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify(data),
 		})
 		return response.json()
@@ -165,8 +167,9 @@ export const api = {
 	createVacation: async (data: Omit<Vacation, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/vacations`, {
 			method: 'POST',
-			headers: getAuthHeaders() as Record<string, string>,
-
+			headers: {
+				'Content-Type': 'application/json',
+			},
 			body: JSON.stringify(data),
 		})
 		return response.json()
