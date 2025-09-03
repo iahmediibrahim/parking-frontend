@@ -1,3 +1,4 @@
+import { getValidAuthData } from '@/lib/auth'
 import {
 	Category,
 	Gate,
@@ -11,22 +12,39 @@ import {
 const API_BASE_URL =
 	process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1'
 
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+	const authData = getValidAuthData()
+	return authData?.token
+		? {
+				Authorization: `Bearer ${authData.token}`,
+				'Content-Type': 'application/json',
+		  }
+		: {}
+}
+
 export const api = {
 	// Auth
 	login: async (username: string, password: string) => {
 		const response = await fetch(`${API_BASE_URL}/auth/login`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify({ username, password }),
 		})
+
+		if (!response.ok) {
+			throw new Error('Login failed')
+		}
+
 		return response.json()
 	},
 
 	// Master data
 	getGates: async (): Promise<Gate[]> => {
-		const response = await fetch(`${API_BASE_URL}/master/gates`)
+		const response = await fetch(`${API_BASE_URL}/master/gates`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return response.json()
 	},
 
@@ -34,18 +52,24 @@ export const api = {
 		const url = gateId
 			? `${API_BASE_URL}/master/zones?gateId=${gateId}`
 			: `${API_BASE_URL}/master/zones`
-		const response = await fetch(url)
+		const response = await fetch(url, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return response.json()
 	},
 
 	getCategories: async (): Promise<Category[]> => {
-		const response = await fetch(`${API_BASE_URL}/master/categories`)
+		const response = await fetch(`${API_BASE_URL}/master/categories`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return response.json()
 	},
 
 	// Subscriptions
 	getSubscription: async (id: string): Promise<Subscription> => {
-		const response = await fetch(`${API_BASE_URL}/subscriptions/${id}`)
+		const response = await fetch(`${API_BASE_URL}/subscriptions/${id}`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return response.json()
 	},
 
@@ -58,9 +82,7 @@ export const api = {
 	}) => {
 		const response = await fetch(`${API_BASE_URL}/tickets/checkin`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
 			body: JSON.stringify(data),
 		})
 		return response.json()
@@ -69,31 +91,35 @@ export const api = {
 	checkout: async (ticketId: string, forceConvertToVisitor = false) => {
 		const response = await fetch(`${API_BASE_URL}/tickets/checkout`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
 			body: JSON.stringify({ ticketId, forceConvertToVisitor }),
 		})
 		return response.json()
 	},
 
 	getTicket: async (id: string): Promise<Ticket> => {
-		const response = await fetch(`${API_BASE_URL}/tickets/${id}`)
+		const response = await fetch(`${API_BASE_URL}/tickets/${id}`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return response.json()
 	},
 
 	// Admin endpoints
 	getParkingState: async (): Promise<Zone[]> => {
-		const response = await fetch(`${API_BASE_URL}/admin/reports/parking-state`)
+		const response = await fetch(
+			`${API_BASE_URL}/admin/reports/parking-state`,
+			{
+				headers: getAuthHeaders() as Record<string, string>,
+			},
+		)
 		return response.json()
 	},
 
 	updateCategory: async (id: string, data: Partial<Category>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/categories/${id}`, {
 			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify(data),
 		})
 		return response.json()
@@ -102,9 +128,8 @@ export const api = {
 	toggleZone: async (id: string, open: boolean) => {
 		const response = await fetch(`${API_BASE_URL}/admin/zones/${id}/open`, {
 			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify({ open }),
 		})
 		return response.json()
@@ -118,9 +143,8 @@ export const api = {
 	createRushHour: async (data: Omit<RushHour, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/rush-hours`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify(data),
 		})
 		return response.json()
@@ -141,9 +165,8 @@ export const api = {
 	createVacation: async (data: Omit<Vacation, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/vacations`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify(data),
 		})
 		return response.json()

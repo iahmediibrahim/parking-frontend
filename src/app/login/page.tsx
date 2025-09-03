@@ -1,19 +1,28 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
 
-export default function LoginPage() {
+const Login: React.FC = () => {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState('')
-	const { login } = useAuthStore()
+	const [isLoading, setIsLoading] = useState(false)
+	const { user, login } = useAuthStore()
 	const router = useRouter()
+
+	// Redirect if already logged in
+	useEffect(() => {
+		if (user) {
+			router.push(user.role === 'admin' ? '/admin' : '/checkpoint')
+		}
+	}, [user, router])
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setError('')
+		setIsLoading(true)
 
 		try {
 			const response = await api.login(username, password)
@@ -25,7 +34,17 @@ export default function LoginPage() {
 			}
 		} catch (err) {
 			setError('Login failed. Please try again.')
+		} finally {
+			setIsLoading(false)
 		}
+	}
+
+	if (user) {
+		return (
+			<div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md text-center mt-20">
+				<p>Redirecting...</p>
+			</div>
+		)
 	}
 
 	return (
@@ -53,6 +72,7 @@ export default function LoginPage() {
 						onChange={(e) => setUsername(e.target.value)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 						required
+						disabled={isLoading}
 					/>
 				</div>
 
@@ -70,22 +90,26 @@ export default function LoginPage() {
 						onChange={(e) => setPassword(e.target.value)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 						required
+						disabled={isLoading}
 					/>
 				</div>
 
 				<button
 					type="submit"
-					className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+					className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+					disabled={isLoading}
 				>
-					Sign In
+					{isLoading ? 'Signing in...' : 'Sign In'}
 				</button>
 			</form>
 
 			<div className="mt-6 text-sm text-gray-600">
 				<p className="font-bold">Demo credentials:</p>
 				<p>Admin: username: admin, password: adminpass</p>
-				<p>Employee: username: emp1, password: pass1</p>
+				<p>Employee: username: employee, password: pass1</p>
 			</div>
 		</div>
 	)
 }
+
+export default Login

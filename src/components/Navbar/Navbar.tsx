@@ -2,7 +2,17 @@
 import Link from 'next/link'
 import { useAuthStore } from '@/store/authStore'
 export function Navbar() {
-	const { user, logout } = useAuthStore()
+	const { user, logout, isLoading } = useAuthStore()
+	console.log(isLoading)
+	if (isLoading) {
+		return (
+			<div className="min-h-screen bg-gray-100 flex items-center justify-center">
+				<div className="text-center">
+					<div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600"></div>
+				</div>
+			</div>
+		)
+	}
 
 	return (
 		<nav className="bg-blue-600 text-white p-4">

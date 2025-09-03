@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@tanstack/react-query": "^5.85.9",
 		"framer-motion": "^12.23.12",
+		"js-cookie": "^3.0.5",
 		"next": "15.5.2",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
@@ -19,12 +20,16 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
+		"@types/js-cookie": "^3.0.6",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@types/ws": "^8.18.1",
+		"add": "^2.0.6",
 		"eslint": "^9",
 		"eslint-config-next": "15.5.2",
+		"jwt-decode": "^4.0.0",
+		"pnpm": "^10.15.1",
 		"tailwindcss": "^4",
 		"typescript": "^5"
 	},
