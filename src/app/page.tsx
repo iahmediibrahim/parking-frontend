@@ -9,7 +9,7 @@ export default function Home() {
 	const { data: gates, isLoading, error } = useGates()
 
 	return (
-		<div className="min-h-screen p-8 mt-20">
+		<div className="min-h-screen p-8">
 			<motion.h1
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -84,82 +84,149 @@ export default function Home() {
 			</section>
 
 			{/* Operations Section */}
-			<section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-				<motion.div
-					whileHover={{ scale: 1.01, y: -5 }}
-					initial={{ opacity: 0, x: -20 }}
-					animate={{ opacity: 1, x: 0 }}
-					className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
-				>
-					<div className="text-center">
-						<motion.span
-							animate={{ rotate: [0, 10, -10, 0] }}
-							transition={{ repeat: Infinity, duration: 2 }}
-							className="text-4xl mb-4 block"
+			<section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+				{user ? (
+					user.role === 'admin' ? (
+						<AdminCard />
+					) : (
+						<CheckpointCard isLoggedIn={true} />
+					)
+				) : (
+					<>
+						<motion.div
+							whileHover={{ scale: 1.01, y: -5 }}
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
 						>
-							🚗
-						</motion.span>
-						<h2 className="text-2xl font-bold mb-4 text-[#333333]">
-							Checkpoint Operations
-						</h2>
-						<p className="mb-6 text-[#666666]">
-							Process vehicle check-outs and payments
-						</p>
-						{user ? (
-							<motion.div whileHover={{ scale: 1.02 }}>
-								<Link
-									href="/checkpoint"
-									className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+							<div className="text-center">
+								<motion.span
+									animate={{ rotate: 360 }}
+									transition={{
+										repeat: Infinity,
+										duration: 10,
+										ease: 'linear',
+									}}
+									className="text-4xl mb-4 block"
 								>
-									Access Checkpoint
-								</Link>
-							</motion.div>
-						) : (
-							<motion.div whileHover={{ scale: 1.02 }}>
-								<Link
-									href="/login"
-									className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
-								>
-									Login as Employee
-								</Link>
-							</motion.div>
-						)}
-					</div>
-				</motion.div>
+									⚙️
+								</motion.span>
+								<h2 className="text-2xl font-bold mb-4 text-[#333333]">
+									Admin Login
+								</h2>
+								<p className="mb-6 text-[#666666]">
+									Access system configuration and reports
+								</p>
+								<motion.div whileHover={{ scale: 1.02 }}>
+									<Link
+										href="/login?role=admin"
+										className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+									>
+										Login as Admin
+									</Link>
+								</motion.div>
+							</div>
+						</motion.div>
 
-				{user?.role === 'admin' && (
-					<motion.div
-						whileHover={{ scale: 1.01, y: -5 }}
-						initial={{ opacity: 0, x: 20 }}
-						animate={{ opacity: 1, x: 0 }}
-						className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
-					>
-						<div className="text-center">
-							<motion.span
-								animate={{ rotate: 360 }}
-								transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
-								className="text-4xl mb-4 block"
-							>
-								⚙️
-							</motion.span>
-							<h2 className="text-2xl font-bold mb-4 text-[#333333]">
-								Admin Dashboard
-							</h2>
-							<p className="mb-6 text-[#666666]">
-								Manage system configuration and view reports
-							</p>
-							<motion.div whileHover={{ scale: 1.02 }}>
-								<Link
-									href="/admin"
-									className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+						<motion.div
+							whileHover={{ scale: 1.01, y: -5 }}
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
+						>
+							<div className="text-center">
+								<motion.span
+									animate={{ rotate: [0, 10, -10, 0] }}
+									transition={{ repeat: Infinity, duration: 2 }}
+									className="text-4xl mb-4 block"
 								>
-									Access Admin Dashboard
-								</Link>
-							</motion.div>
-						</div>
-					</motion.div>
+									🚗
+								</motion.span>
+								<h2 className="text-2xl font-bold mb-4 text-[#333333]">
+									Checkpoint Login
+								</h2>
+								<p className="mb-6 text-[#666666]">
+									Process vehicle check-outs and payments
+								</p>
+								<motion.div whileHover={{ scale: 1.02 }}>
+									<Link
+										href="/login?role=checkpoint"
+										className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+									>
+										Login as Employee
+									</Link>
+								</motion.div>
+							</div>
+						</motion.div>
+					</>
 				)}
 			</section>
 		</div>
 	)
 }
+
+const AdminCard = () => (
+	<motion.div
+		whileHover={{ scale: 1.01, y: -5 }}
+		initial={{ opacity: 0, x: 20 }}
+		animate={{ opacity: 1, x: 0 }}
+		className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
+	>
+		<div className="text-center">
+			<motion.span
+				animate={{ rotate: 360 }}
+				transition={{ repeat: Infinity, duration: 10, ease: 'linear' }}
+				className="text-4xl mb-4 block"
+			>
+				⚙️
+			</motion.span>
+			<h2 className="text-2xl font-bold mb-4 text-[#333333]">
+				Admin Dashboard
+			</h2>
+			<p className="mb-6 text-[#666666]">
+				Manage system configuration and view reports
+			</p>
+			<motion.div whileHover={{ scale: 1.02 }}>
+				<Link
+					href="/admin"
+					className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+				>
+					Access Admin Dashboard
+				</Link>
+			</motion.div>
+		</div>
+	</motion.div>
+)
+
+const CheckpointCard = ({ isLoggedIn }: { isLoggedIn: boolean }) => (
+	<motion.div
+		whileHover={{ scale: 1.01, y: -5 }}
+		initial={{ opacity: 0, x: -20 }}
+		animate={{ opacity: 1, x: 0 }}
+		className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-[#ef4937]/10"
+	>
+		<div className="text-center">
+			<motion.span
+				animate={{ rotate: [0, 10, -10, 0] }}
+				transition={{ repeat: Infinity, duration: 2 }}
+				className="text-4xl mb-4 block"
+			>
+				🚗
+			</motion.span>
+			<h2 className="text-2xl font-bold mb-4 text-[#333333]">
+				Checkpoint Operations
+			</h2>
+			<p className="mb-6 text-[#666666]">
+				Process vehicle check-outs and payments
+			</p>
+			<motion.div whileHover={{ scale: 1.02 }}>
+				<Link
+					href={isLoggedIn ? '/checkpoint' : '/login'}
+					className="inline-block bg-[#ef4937] text-white px-8 py-3 rounded-lg hover:bg-[#d43826] transition-all duration-200"
+				>
+					{isLoggedIn ? 'Access Checkpoint' : 'Login as Employee'}
+				</Link>
+			</motion.div>
+		</div>
+	</motion.div>
+)

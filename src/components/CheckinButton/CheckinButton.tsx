@@ -1,3 +1,5 @@
+import { PrimaryButton } from '../PrimaryButton'
+
 interface CheckinButtonProps {
 	onClick: () => void
 	disabled: boolean
@@ -10,12 +12,8 @@ export function CheckinButton({
 	isCheckingIn,
 }: CheckinButtonProps) {
 	return (
-		<button
-			onClick={onClick}
-			disabled={disabled}
-			className="px-6 py-2 btn-primary rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-		>
+		<PrimaryButton onClick={onClick} disabled={disabled}>
 			{isCheckingIn ? 'Processing...' : 'Check In'}
-		</button>
+		</PrimaryButton>
 	)
 }

@@ -1,48 +1,134 @@
 'use client'
-import Link from 'next/link'
 import { useAuthStore } from '@/store/authStore'
+import { NavLink } from '../NavLink'
+import { useState } from 'react'
+import { PrimaryButton } from '../PrimaryButton'
+import { usePathname } from 'next/navigation'
+
+const routes = [
+	{
+		role: 'employee',
+		href: '/checkpoint',
+		label: 'Checkpoint',
+	},
+	{
+		role: 'admin',
+		href: '/admin',
+		label: 'Dashboard',
+	},
+]
+
 export function Navbar() {
-	const { user, logout, isLoading } = useAuthStore()
-	console.log(isLoading)
-	if (isLoading) {
-		return (
-			<div className="min-h-screen bg-gray-100 flex items-center justify-center">
-				<div className="text-center">
-					<div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-[#ef4937]"></div>
-				</div>
-			</div>
-		)
-	}
+	const { user, logout } = useAuthStore()
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const pathname = usePathname()
 
 	return (
-		<nav className="bg-white shadow-sm text-[#ef4937] p-4">
-			<div className="container mx-auto flex justify-between items-center">
-				<Link href="/" className="text-xl font-bold">
-					Parking Reservation System
-				</Link>
+		<nav className="bg-white shadow-sm p-4">
+			<div className="container mx-auto">
+				<div className="flex justify-between items-center">
+					<div className="flex items-center space-x-6">
+						<NavLink
+							href="/"
+							className={`text-xl font-bold ${
+								pathname === '/' ? 'text-[#ef4937]' : ''
+							}`}
+						>
+							PRS
+						</NavLink>
 
-				<div className="flex items-center space-x-4">
-					{user ? (
-						<>
-							<span>Hello, {user.username}</span>
-							{user.role === 'admin' && (
-								<Link href="/admin" className="hover:underline">
-									Admin Dashboard
-								</Link>
+						<div className="hidden md:flex items-center space-x-6">
+							{routes.map(
+								(link) =>
+									user?.role === link.role && (
+										<NavLink
+											key={link.href}
+											href={link.href}
+											active={pathname === link.href}
+										>
+											{link.label}
+										</NavLink>
+									),
 							)}
-							<button
-								onClick={logout}
-								className="bg-[#ef4937] hover:bg-[#d43a2a] text-white px-3 py-1 rounded transition-colors"
+						</div>
+					</div>
+
+					<div className="hidden md:flex items-center space-x-4">
+						{user ? (
+							<>
+								<span className="text-[#ef4937]">Hello, {user.username}</span>
+								<PrimaryButton onClick={logout}>Logout</PrimaryButton>
+							</>
+						) : (
+							<NavLink
+								href="/login"
+								className={pathname === '/login' ? 'text-[#ef4937]' : ''}
 							>
-								Logout
-							</button>
-						</>
-					) : (
-						<Link href="/login" className="hover:underline">
-							Login
-						</Link>
-					)}
+								Login
+							</NavLink>
+						)}
+					</div>
+
+					{/* Mobile menu button */}
+					<button
+						onClick={() => setIsMenuOpen(!isMenuOpen)}
+						className="md:hidden p-2"
+					>
+						<svg
+							className="w-6 h-6"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d={
+									isMenuOpen
+										? 'M6 18L18 6M6 6l12 12'
+										: 'M4 6h16M4 12h16M4 18h16'
+								}
+							/>
+						</svg>
+					</button>
 				</div>
+
+				{/* Mobile menu */}
+				{isMenuOpen && (
+					<div className="md:hidden mt-4 space-y-4">
+						{routes.map(
+							(link) =>
+								user?.role === link.role && (
+									<NavLink
+										key={link.href}
+										href={link.href}
+										active={pathname === link.href}
+										className={`block py-2 `}
+									>
+										{link.label}
+									</NavLink>
+								),
+						)}
+						{user ? (
+							<div className="space-y-4">
+								<span className="block text-[#ef4937]">
+									Hello, {user.username}
+								</span>
+								<PrimaryButton onClick={logout}>Logout</PrimaryButton>
+							</div>
+						) : (
+							<NavLink
+								href="/login"
+								className={`block py-2 ${
+									pathname === '/login' ? 'text-[#ef4937]' : ''
+								}`}
+							>
+								Login
+							</NavLink>
+						)}
+					</div>
+				)}
 			</div>
 		</nav>
 	)

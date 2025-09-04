@@ -26,10 +26,14 @@ export const useCheckout = () => {
 	})
 }
 
-export const useTicket = (id: string) => {
+export const useTicket = (
+	id: string,
+	options?: { enabled?: boolean; retry?: boolean },
+) => {
 	return useQuery({
 		queryKey: ['ticket', id],
 		queryFn: () => api.getTicket(id),
-		enabled: !!id,
+		enabled: options?.enabled ?? !!id,
+		retry: options?.retry,
 	})
 }

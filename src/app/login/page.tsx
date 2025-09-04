@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
+import { Loader, PrimaryButton } from '@/components'
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState('')
@@ -39,13 +40,7 @@ const Login: React.FC = () => {
 		}
 	}
 
-	if (user) {
-		return (
-			<div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md text-center mt-20">
-				<p>Redirecting...</p>
-			</div>
-		)
-	}
+	if (user) return <Loader />
 
 	return (
 		<div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mt-20 border border-gray-100">
@@ -95,20 +90,17 @@ const Login: React.FC = () => {
 						disabled={isLoading}
 					/>
 				</div>
-
-				<button
-					type="submit"
-					className="w-full bg-[#ef4937] hover:bg-[#d43a2a] text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-[#ef4937] focus:ring-opacity-50 transition-colors disabled:bg-gray-300"
-					disabled={isLoading}
-				>
-					{isLoading ? 'Signing in...' : 'Sign In'}
-				</button>
+				<div className="flex justify-center">
+					<PrimaryButton type="submit" disabled={isLoading}>
+						{isLoading ? 'Signing in...' : 'Sign In'}
+					</PrimaryButton>
+				</div>
 			</form>
 
 			<div className="mt-6 text-sm text-gray-600">
 				<p className="font-bold">Demo credentials:</p>
 				<p>Admin: username: admin, password: adminpass</p>
-				<p>Employee: username: employee, password: pass1</p>
+				<p>Employee: username: emp1, password: pass1</p>
 			</div>
 		</div>
 	)

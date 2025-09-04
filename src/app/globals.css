@@ -33,13 +33,3 @@ body {
 	color: var(--foreground);
 	font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
-
-.btn-primary {
-	background-color: var(--accent);
-	color: white;
-	transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-	filter: brightness(0.9);
-}

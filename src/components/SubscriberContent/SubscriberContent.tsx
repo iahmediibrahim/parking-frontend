@@ -14,6 +14,7 @@ export function SubscriberContent({
 	onCheckin,
 	isCheckingIn,
 }: TabContentProps) {
+	console.log('verifiedSubscription', verifiedSubscription)
 	return (
 		<div className="space-y-6">
 			<SubscriptionVerification
@@ -22,6 +23,7 @@ export function SubscriberContent({
 				verifiedSubscription={verifiedSubscription!}
 				handleVerifySubscription={handleVerifySubscription!}
 			/>
+
 			<ZoneGrid
 				zones={zones}
 				selectedZone={selectedZone}
@@ -31,7 +33,9 @@ export function SubscriberContent({
 			<div className="flex justify-end">
 				<CheckinButton
 					onClick={onCheckin}
-					disabled={!selectedZone || !verifiedSubscription || isCheckingIn}
+					disabled={
+						!selectedZone || !verifiedSubscription?.active || isCheckingIn
+					}
 					isCheckingIn={isCheckingIn}
 				/>
 			</div>

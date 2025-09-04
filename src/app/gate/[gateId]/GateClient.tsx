@@ -1,13 +1,12 @@
 // Client Component
 'use client'
 import React, { useState, useEffect } from 'react'
-import * as motion from 'motion/react-client'
 import { Zone, Subscription } from '@/types'
 import { useZones } from '@/hooks/useZones'
 import { CheckinParams, useCheckin } from '@/hooks/useTickets'
 import { useSubscription } from '@/hooks/useSubscriptions'
 import { useWebSocketStore } from '@/store/websocketStore'
-import { PrintableTicket, SubscriberContent, Tabs } from '@/components'
+import { Loader, PrintableTicket, SubscriberContent, Tabs } from '@/components'
 import toast from 'react-hot-toast'
 import { VisitorContent } from '@/components/VisitorContent'
 
@@ -18,15 +17,15 @@ export default function GateClient({ gateId }: { gateId: string }) {
 		useState<Subscription | null>(null)
 	const [showTicket, setShowTicket] = useState(false)
 	const [ticketData, setTicketData] = useState<any>(null)
+	const [isVerifying, setIsVerifying] = useState(false)
 
 	const { data: zones, isLoading, error, refetch } = useZones(gateId)
 	const { mutate: checkin, isPending: isCheckingIn } = useCheckin()
-	const { data: subscription, refetch: verifySubscription } = useSubscription(
-		subscriptionId,
-		{
+	const { refetch: verifySubscription, error: subscriptionError } =
+		useSubscription(subscriptionId, {
 			enabled: false,
-		},
-	)
+			retry: false,
+		})
 	const { isConnected, subscribe, unsubscribe, messages } = useWebSocketStore()
 
 	useEffect(() => {
@@ -44,18 +43,25 @@ export default function GateClient({ gateId }: { gateId: string }) {
 	}, [messages, refetch])
 
 	const handleVerifySubscription = async () => {
-		if (!subscriptionId) return
+		if (!subscriptionId || isVerifying) return
+
+		setIsVerifying(true)
 		try {
 			const result = await verifySubscription()
-			// Wait for the subscription data to be available
 			if (result.data) {
 				setVerifiedSubscription(result.data)
 			} else {
 				toast.error('No subscription found')
+				setVerifiedSubscription(null)
 			}
 		} catch (err) {
-			toast.error('Failed to verify subscription')
+			const errorMessage =
+				subscriptionError?.message || 'Failed to verify subscription'
+			toast.error(errorMessage)
 			console.error('Failed to verify subscription:', err)
+			setVerifiedSubscription(null)
+		} finally {
+			setIsVerifying(false)
 		}
 	}
 
@@ -97,7 +103,7 @@ export default function GateClient({ gateId }: { gateId: string }) {
 					</p>
 					<button
 						onClick={() => refetch()}
-						className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+						className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
 					>
 						Try Again
 					</button>
@@ -105,14 +111,7 @@ export default function GateClient({ gateId }: { gateId: string }) {
 			</div>
 		)
 	}
-
-	if (isLoading) {
-		return (
-			<div className="flex items-center justify-center h-[50vh]">
-				<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-			</div>
-		)
-	}
+	if (isLoading) return <Loader />
 
 	const tabs = [
 		{

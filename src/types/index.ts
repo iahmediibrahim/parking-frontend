@@ -46,17 +46,18 @@ export interface Gate {
 	location: string
 }
 
+export interface Car {
+	plate: string
+	brand: string
+	model: string
+	color: string
+}
 export interface Subscription {
 	id: string
 	userName: string
 	active: boolean
 	category: string
-	cars: Array<{
-		plate: string
-		brand: string
-		model: string
-		color: string
-	}>
+	cars: Car[]
 	startsAt: string
 	expiresAt: string
 	currentCheckins: Array<{
