@@ -3,6 +3,17 @@ export interface User {
 	username: string
 	role: 'admin' | 'employee'
 }
+export interface TabContentProps {
+	zones: Zone[]
+	selectedZone: string | null
+	setSelectedZone: (id: string | null) => void
+	onCheckin: () => void
+	isCheckingIn: boolean
+	subscriptionId?: string
+	setSubscriptionId?: (id: string) => void
+	verifiedSubscription?: Subscription | null
+	handleVerifySubscription?: () => void
+}
 
 export interface Category {
 	id: string

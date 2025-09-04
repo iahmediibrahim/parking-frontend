@@ -2,7 +2,7 @@
 import { useGates } from '@/hooks/useGates'
 import { useAuthStore } from '@/store/authStore'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import * as motion from 'motion/react-client'
 
 export default function Home() {
 	const { user } = useAuthStore()

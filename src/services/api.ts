@@ -35,7 +35,8 @@ export const api = {
 		})
 
 		if (!response.ok) {
-			throw new Error('Login failed')
+			const error = await response.json()
+			throw new Error(error.message)
 		}
 
 		return response.json()
@@ -46,6 +47,10 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/master/gates`, {
 			headers: getAuthHeaders() as Record<string, string>,
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -56,6 +61,10 @@ export const api = {
 		const response = await fetch(url, {
 			headers: getAuthHeaders() as Record<string, string>,
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -63,6 +72,10 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/master/categories`, {
 			headers: getAuthHeaders() as Record<string, string>,
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -71,6 +84,10 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/subscriptions/${id}`, {
 			headers: getAuthHeaders() as Record<string, string>,
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -86,6 +103,12 @@ export const api = {
 			headers: getAuthHeaders() as Record<string, string>,
 			body: JSON.stringify(data),
 		})
+
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
+
 		return response.json()
 	},
 
@@ -95,6 +118,10 @@ export const api = {
 			headers: getAuthHeaders() as Record<string, string>,
 			body: JSON.stringify({ ticketId, forceConvertToVisitor }),
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -102,6 +129,10 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/tickets/${id}`, {
 			headers: getAuthHeaders() as Record<string, string>,
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -113,6 +144,10 @@ export const api = {
 				headers: getAuthHeaders() as Record<string, string>,
 			},
 		)
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -120,9 +155,12 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/admin/categories/${id}`, {
 			method: 'PUT',
 			headers: getAuthHeaders() as Record<string, string>,
-
 			body: JSON.stringify(data),
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -130,14 +168,21 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/admin/zones/${id}/open`, {
 			method: 'PUT',
 			headers: getAuthHeaders() as Record<string, string>,
-
 			body: JSON.stringify({ open }),
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
 	getRushHours: async (): Promise<RushHour[]> => {
 		const response = await fetch(`${API_BASE_URL}/admin/rush-hours`)
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -149,6 +194,10 @@ export const api = {
 			},
 			body: JSON.stringify(data),
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -156,11 +205,19 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/admin/rush-hours/${id}`, {
 			method: 'DELETE',
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
 	getVacations: async (): Promise<Vacation[]> => {
 		const response = await fetch(`${API_BASE_URL}/admin/vacations`)
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -172,6 +229,10 @@ export const api = {
 			},
 			body: JSON.stringify(data),
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 
@@ -179,6 +240,10 @@ export const api = {
 		const response = await fetch(`${API_BASE_URL}/admin/vacations/${id}`, {
 			method: 'DELETE',
 		})
+		if (!response.ok) {
+			const error = await response.json()
+			throw new Error(error.message)
+		}
 		return response.json()
 	},
 }

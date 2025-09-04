@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/services/api'
 
-type CheckinParams = {
+export type CheckinParams = {
 	gateId: string
 	zoneId: string
 	type: 'visitor' | 'subscriber'

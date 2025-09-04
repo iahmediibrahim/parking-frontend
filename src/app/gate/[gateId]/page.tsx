@@ -6,7 +6,7 @@ export default async function GateScreen({
 }: {
 	params: { gateId: string }
 }) {
-	const { gateId } = params
+	const { gateId } = await params
 
 	return <GateClient gateId={gateId} />
 }

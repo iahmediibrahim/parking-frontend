@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { AuthInitializer, Navbar } from '@/components'
+import { AuthInitializer, Navbar, WebSocketInitializer } from '@/components'
 import Providers from './providers'
+import { Toaster } from 'react-hot-toast'
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -31,10 +32,13 @@ export default function RootLayout({
 			>
 				<div className="min-h-screen bg-white text-gray-800">
 					<AuthInitializer />
+					<WebSocketInitializer />
+
 					<Navbar />
-					<main className="container mx-auto p-4">
+					<main className="container mx-auto p-4 mt-20">
 						<Providers>{children}</Providers>
 					</main>
+					<Toaster position="top-right" />
 				</div>
 			</body>
 		</html>
