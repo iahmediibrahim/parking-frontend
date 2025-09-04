@@ -13,7 +13,7 @@ export interface AuthData {
 	expiresAt: number
 }
 
-export const setAuthData = (data: AuthData) => {
+export const setAuthData = (data: AuthData): void => {
 	// Set cookie with auth data (expires in 7 days)
 	Cookies.set('auth', JSON.stringify(data), { expires: 7 })
 
@@ -36,7 +36,7 @@ export const getAuthData = (): AuthData | null => {
 	}
 }
 
-export const removeAuthData = () => {
+export const removeAuthData = (): void => {
 	Cookies.remove('auth')
 	if (typeof window !== 'undefined') {
 		localStorage.removeItem('token')
@@ -45,8 +45,8 @@ export const removeAuthData = () => {
 
 export const isTokenExpired = (token: string): boolean => {
 	try {
-		const decoded: any = jwtDecode(token)
-		return decoded.exp * 1000 < Date.now()
+		const decoded = jwtDecode(token)
+		return (decoded as { exp: number }).exp * 1000 < Date.now()
 	} catch {
 		return true
 	}

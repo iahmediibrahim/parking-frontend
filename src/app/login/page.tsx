@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/authStore'
 import { api } from '@/services/api'
 import { useRouter } from 'next/navigation'
 import { Loader, PrimaryButton } from '@/components'
+import { LoginResponse } from '@/types'
 
 const Login: React.FC = () => {
 	const [username, setUsername] = useState('')
@@ -26,7 +27,7 @@ const Login: React.FC = () => {
 		setIsLoading(true)
 
 		try {
-			const response = await api.login(username, password)
+			const response: LoginResponse = await api.login(username, password)
 			if (response.user && response.token) {
 				login(response.user, response.token)
 				router.push(response.user.role === 'admin' ? '/admin' : '/checkpoint')
@@ -34,7 +35,11 @@ const Login: React.FC = () => {
 				setError('Invalid credentials')
 			}
 		} catch (err) {
-			setError('Login failed. Please try again.')
+			setError(
+				`Login failed. Please try again. ${
+					err instanceof Error ? err.message : 'Unknown error occurred'
+				}`,
+			)
 		} finally {
 			setIsLoading(false)
 		}

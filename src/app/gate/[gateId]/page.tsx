@@ -4,7 +4,7 @@ import GateClient from './GateClient'
 export default async function GateScreen({
 	params,
 }: {
-	params: { gateId: string }
+	params: Promise<{ gateId: string }>
 }) {
 	const { gateId } = await params
 

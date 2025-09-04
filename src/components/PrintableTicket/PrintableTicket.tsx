@@ -2,6 +2,7 @@
 import { Ticket } from '@/types'
 import * as motion from 'motion/react-client'
 import { useState, useEffect } from 'react'
+import { PrimaryButton } from '../PrimaryButton'
 
 export function PrintableTicket({
 	showTicket,
@@ -100,12 +101,9 @@ export function PrintableTicket({
 							>
 								Close
 							</button>
-							<button
-								onClick={() => window.print()}
-								className="btn-primary px-4 py-2 rounded-md"
-							>
+							<PrimaryButton onClick={() => window.print()}>
 								Print Ticket
-							</button>
+							</PrimaryButton>
 						</div>
 					</motion.div>
 				</div>

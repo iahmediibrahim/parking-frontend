@@ -1,9 +1,14 @@
-export interface User {
+export type User = {
 	id: string
 	username: string
 	role: 'admin' | 'employee'
 }
-export interface TabContentProps {
+export type LoginResponse = {
+	user: User
+	token: string
+}
+
+export type TabContentProps = {
 	zones: Zone[]
 	selectedZone: string | null
 	setSelectedZone: (id: string | null) => void
@@ -15,7 +20,7 @@ export interface TabContentProps {
 	handleVerifySubscription?: () => void
 }
 
-export interface Category {
+export type Category = {
 	id: string
 	name: string
 	description: string
@@ -23,7 +28,7 @@ export interface Category {
 	rateSpecial: number
 }
 
-export interface Zone {
+export type Zone = {
 	id: string
 	name: string
 	categoryId: string
@@ -39,20 +44,21 @@ export interface Zone {
 	open: boolean
 }
 
-export interface Gate {
+export type Gate = {
 	id: string
 	name: string
 	zoneIds: string[]
 	location: string
 }
 
-export interface Car {
+export type Car = {
 	plate: string
 	brand: string
 	model: string
 	color: string
 }
-export interface Subscription {
+
+export type Subscription = {
 	id: string
 	userName: string
 	active: boolean
@@ -60,14 +66,14 @@ export interface Subscription {
 	cars: Car[]
 	startsAt: string
 	expiresAt: string
-	currentCheckins: Array<{
+	currentCheckins: {
 		ticketId: string
 		zoneId: string
 		checkinAt: string
-	}>
+	}[]
 }
 
-export interface Ticket {
+export type Ticket = {
 	id: string
 	type: 'visitor' | 'subscriber'
 	zoneId: string
@@ -77,38 +83,45 @@ export interface Ticket {
 	subscriptionId?: string
 }
 
-export interface CheckoutResponse {
+export type CheckoutResponse = {
 	ticketId: string
 	checkinAt: string
 	checkoutAt: string
 	durationHours: number
-	breakdown: Array<{
+	breakdown: {
 		from: string
 		to: string
 		hours: number
 		rateMode: string
 		rate: number
 		amount: number
-	}>
+	}[]
 	amount: number
 	zoneState: Zone
 }
-
-export interface RushHour {
+export type CheckInResponse = {
+	ticket: Ticket
+	zoneState: Zone
+}
+export type RushHour = {
 	id: string
 	weekDay: number
 	from: string
 	to: string
 }
 
-export interface Vacation {
+export type Vacation = {
 	id: string
 	name: string
 	from: string
 	to: string
 }
 
-export interface WsMessage {
+export type WsMessage = {
 	type: 'zone-update' | 'admin-update'
-	payload: any
+	payload: {
+		specialActive?: boolean
+		zoneId?: string
+		[key: string]: unknown
+	}
 }

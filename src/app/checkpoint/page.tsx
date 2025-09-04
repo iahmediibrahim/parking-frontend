@@ -73,7 +73,7 @@ const Checkpoint: React.FC = () => {
 		checkout(
 			{ ticketId, forceConvertToVisitor: forceConvert },
 			{
-				onSuccess: (data) => {
+				onSuccess: (data: CheckoutResponse) => {
 					setCheckoutData(data)
 					toast.success('Checkout completed successfully')
 					setTicketId('')

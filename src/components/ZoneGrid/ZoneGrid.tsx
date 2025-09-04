@@ -1,4 +1,4 @@
-import { Zone, WsMessage } from '@/types'
+import { WsMessage, Zone } from '@/types'
 import * as motion from 'motion/react-client'
 import { useWebSocketStore } from '@/store/websocketStore'
 import { useMemo } from 'react'
@@ -24,7 +24,7 @@ export function ZoneGrid({
 		const activeZones = new Set<string>()
 
 		// Process messages to find zones with special rates active
-		messages.forEach((message) => {
+		messages.forEach((message: WsMessage) => {
 			if (message.type === 'zone-update' && message.payload) {
 				// Check if the message payload has specialActive property
 				if (message.payload.specialActive && message.payload.zoneId) {

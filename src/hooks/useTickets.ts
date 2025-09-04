@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/services/api'
+import { CheckInResponse, CheckoutResponse } from '@/types'
 
 export type CheckinParams = {
 	gateId: string
@@ -14,13 +15,13 @@ type CheckoutParams = {
 }
 
 export const useCheckin = () => {
-	return useMutation<any, Error, CheckinParams>({
+	return useMutation<CheckInResponse, Error, CheckinParams>({
 		mutationFn: api.checkin,
 	})
 }
 
 export const useCheckout = () => {
-	return useMutation<any, Error, CheckoutParams>({
+	return useMutation<CheckoutResponse, Error, CheckoutParams>({
 		mutationFn: ({ ticketId, forceConvertToVisitor }) =>
 			api.checkout(ticketId, forceConvertToVisitor),
 	})

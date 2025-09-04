@@ -1,23 +1,22 @@
-// Client Component
 'use client'
-import React, { useState, useEffect } from 'react'
-import { Zone, Subscription } from '@/types'
+import React from 'react'
+import { Zone, Subscription, Ticket } from '@/types'
 import { useZones } from '@/hooks/useZones'
 import { CheckinParams, useCheckin } from '@/hooks/useTickets'
 import { useSubscription } from '@/hooks/useSubscriptions'
-import { useWebSocketStore } from '@/store/websocketStore'
 import { Loader, PrintableTicket, SubscriberContent, Tabs } from '@/components'
 import toast from 'react-hot-toast'
 import { VisitorContent } from '@/components/VisitorContent'
+import { useWebSocket } from '@/hooks/useWebSocket'
 
 export default function GateClient({ gateId }: { gateId: string }) {
-	const [selectedZone, setSelectedZone] = useState<string | null>(null)
-	const [subscriptionId, setSubscriptionId] = useState('')
+	const [selectedZone, setSelectedZone] = React.useState<string | null>(null)
+	const [subscriptionId, setSubscriptionId] = React.useState('')
 	const [verifiedSubscription, setVerifiedSubscription] =
-		useState<Subscription | null>(null)
-	const [showTicket, setShowTicket] = useState(false)
-	const [ticketData, setTicketData] = useState<any>(null)
-	const [isVerifying, setIsVerifying] = useState(false)
+		React.useState<Subscription | null>(null)
+	const [showTicket, setShowTicket] = React.useState(false)
+	const [ticketData, setTicketData] = React.useState<Ticket | null>(null)
+	const [isVerifying, setIsVerifying] = React.useState(false)
 
 	const { data: zones, isLoading, error, refetch } = useZones(gateId)
 	const { mutate: checkin, isPending: isCheckingIn } = useCheckin()
@@ -26,23 +25,17 @@ export default function GateClient({ gateId }: { gateId: string }) {
 			enabled: false,
 			retry: false,
 		})
-	const { isConnected, subscribe, unsubscribe, messages } = useWebSocketStore()
 
-	useEffect(() => {
-		if (gateId) {
-			subscribe(gateId)
-			return () => unsubscribe(gateId)
-		}
-	}, [gateId, subscribe, unsubscribe])
+	const { isConnected, messages } = useWebSocket(gateId)
 
-	useEffect(() => {
+	React.useEffect(() => {
 		const lastMessage = messages[messages.length - 1]
 		if (lastMessage?.type === 'zone-update') {
 			refetch()
 		}
 	}, [messages, refetch])
 
-	const handleVerifySubscription = async () => {
+	const handleVerifySubscription = React.useCallback(async () => {
 		if (!subscriptionId || isVerifying) return
 
 		setIsVerifying(true)
@@ -63,36 +56,39 @@ export default function GateClient({ gateId }: { gateId: string }) {
 		} finally {
 			setIsVerifying(false)
 		}
-	}
+	}, [subscriptionId, isVerifying, verifySubscription, subscriptionError])
 
-	const handleCheckin = (type: 'visitor' | 'subscriber') => {
-		if (!selectedZone) return
+	const handleCheckin = React.useCallback(
+		(type: 'visitor' | 'subscriber') => {
+			if (!selectedZone) return
 
-		const checkinData: CheckinParams = {
-			gateId,
-			zoneId: selectedZone,
-			type,
-			...(type === 'subscriber' &&
-				verifiedSubscription && {
-					subscriptionId: verifiedSubscription.id,
-				}),
-		}
+			const checkinData: CheckinParams = {
+				gateId,
+				zoneId: selectedZone,
+				type,
+				...(type === 'subscriber' &&
+					verifiedSubscription && {
+						subscriptionId: verifiedSubscription.id,
+					}),
+			}
 
-		checkin(checkinData, {
-			onSuccess: (data) => {
-				setTicketData(data.ticket)
-				setShowTicket(true)
-				setSelectedZone(null)
-				setSubscriptionId('')
-				setVerifiedSubscription(null)
-				toast.success('Check-in successful')
-			},
-			onError: (error) => {
-				console.error('Checkin failed:', error)
-				toast.error(`Check-in failed. ${error.message}`)
-			},
-		})
-	}
+			checkin(checkinData, {
+				onSuccess: (data) => {
+					setTicketData(data.ticket)
+					setShowTicket(true)
+					setSelectedZone(null)
+					setSubscriptionId('')
+					setVerifiedSubscription(null)
+					toast.success('Check-in successful')
+				},
+				onError: (error) => {
+					console.error('Checkin failed:', error)
+					toast.error(`Check-in failed. ${error.message}`)
+				},
+			})
+		},
+		[selectedZone, gateId, verifiedSubscription, checkin],
+	)
 
 	if (error) {
 		return (
@@ -167,7 +163,7 @@ export default function GateClient({ gateId }: { gateId: string }) {
 			<PrintableTicket
 				showTicket={showTicket}
 				setShowTicket={setShowTicket}
-				ticketData={ticketData}
+				ticketData={ticketData!}
 			/>
 		</div>
 	)

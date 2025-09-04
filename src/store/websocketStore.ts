@@ -9,24 +9,39 @@ interface WebSocketState {
 	disconnect: () => void
 	subscribe: (gateId: string) => void
 	unsubscribe: (gateId: string) => void
+	retryCount: number
+	retryInterval: number
+	retryConnection: () => void
 }
 
 export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 	connection: null,
 	isConnected: false,
 	messages: [],
-
+	retryCount: 0,
+	retryInterval: 5000,
+	retryConnection: () => {
+		const { retryCount } = get()
+		if (retryCount < 5) {
+			// Max 5 retries
+			setTimeout(() => {
+				set({ retryCount: retryCount + 1 })
+				get().connect()
+			}, get().retryInterval)
+		}
+	},
 	connect: () => {
 		const ws = new WebSocket('ws://localhost:3000/api/v1/ws')
 
 		ws.onopen = () => {
-			set({ isConnected: true })
+			set({ isConnected: true, connection: ws })
 			console.log('WebSocket connected')
 		}
 
 		ws.onclose = () => {
-			set({ isConnected: false })
-			console.log('WebSocket disconnected')
+			set({ isConnected: false, connection: null })
+			console.log('WebSocket disconnected, attempting to reconnect...')
+			get().retryConnection()
 		}
 
 		ws.onmessage = (event) => {
@@ -34,7 +49,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 			set((state) => ({ messages: [...state.messages, message] }))
 		}
 
-		set({ connection: ws })
+		// Don't set connection here, wait for onopen
 	},
 
 	disconnect: () => {
@@ -45,7 +60,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
 	subscribe: (gateId: string) => {
 		const { connection, isConnected } = get()
-		if (isConnected && connection) {
+		if (isConnected && connection && connection.readyState === WebSocket.OPEN) {
 			connection.send(
 				JSON.stringify({ type: 'subscribe', payload: { gateId } }),
 			)
@@ -54,7 +69,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
 	unsubscribe: (gateId: string) => {
 		const { connection, isConnected } = get()
-		if (isConnected && connection) {
+		if (isConnected && connection && connection.readyState === WebSocket.OPEN) {
 			connection.send(
 				JSON.stringify({ type: 'unsubscribe', payload: { gateId } }),
 			)

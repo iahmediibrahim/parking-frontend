@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 type Tab = {
 	id: string
 	label: string
-	content: React.ReactNode
+	content?: React.ReactNode
 }
 
 type TabsProps = {
