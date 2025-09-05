@@ -1,5 +1,4 @@
 export * from './Navbar'
-export * from './ProtectedRoute'
 export * from './AuthInitializer'
 export * from './PrintableTicket'
 export * from './Tabs'
