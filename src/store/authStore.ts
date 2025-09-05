@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { getValidAuthData, setAuthData, removeAuthData } from '@/lib/auth'
 import { User } from '@/types'
+import { makePersister, queryClient } from '@/services/queryClient'
+import { useWebSocketStore } from './websocketStore'
 
 interface AuthState {
 	user: User | null
@@ -22,9 +24,17 @@ export const useAuthStore = create<AuthState>((set) => ({
 		set({ user, token, isLoading: false })
 	},
 
-	logout: () => {
+	logout: async () => {
 		removeAuthData()
 		set({ user: null, token: null, isLoading: false })
+		// 1. Clear all React Query cache in memory
+		queryClient.clear()
+
+		// 2. Clear persisted cache in localStorage
+		const persister = makePersister()
+		await persister.removeClient()
+
+		useWebSocketStore.getState().clearAdminUpdates()
 	},
 
 	initialize: () => {

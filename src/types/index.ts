@@ -123,5 +123,20 @@ export type WsMessage = {
 		specialActive?: boolean
 		zoneId?: string
 		[key: string]: unknown
+		timestamp: number
 	}
+}
+export interface AdminUpdateMessage {
+	adminId: string
+	action:
+		| 'category-rates-changed'
+		| 'zone-closed'
+		| 'zone-opened'
+		| 'vacation-added'
+		| 'rush-updated'
+	targetType: 'category' | 'zone' | 'vacation' | 'rush'
+	targetId: string
+	details?: any
+	timestamp: string
+	receivedAt: string // When the frontend received the message
 }

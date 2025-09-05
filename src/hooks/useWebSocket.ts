@@ -1,30 +1,30 @@
 import { useEffect } from 'react'
 import { useWebSocketStore } from '@/store/websocketStore'
 
-export const useWebSocket = (subscriptionId?: string) => {
+export const useWebSocket = (gateId?: string) => {
 	const { isConnected, connect, disconnect, subscribe, unsubscribe, messages } =
 		useWebSocketStore()
 
-	useEffect(function handleConnection() {
-		if (!isConnected) {
-			connect()
-		}
-		return function cleanup() {
-			disconnect()
+	useEffect(() => {
+		connect()
+
+		return () => {
+			// Don't disconnect completely as admin might need the connection
+			// Just unsubscribe from this specific gate
+			if (gateId) {
+				unsubscribe(gateId)
+			}
 		}
 	}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-	useEffect(
-		function handleSubscription() {
-			if (subscriptionId && isConnected) {
-				subscribe(subscriptionId)
-				return function cleanup() {
-					unsubscribe(subscriptionId)
-				}
+	useEffect(() => {
+		if (gateId && isConnected) {
+			subscribe(gateId)
+			return () => {
+				unsubscribe(gateId)
 			}
-		},
-		[subscriptionId, isConnected, subscribe, unsubscribe],
-	)
+		}
+	}, [gateId, isConnected, subscribe, unsubscribe])
 
 	return { isConnected, messages }
 }

@@ -18,7 +18,6 @@ export function ZoneGrid({
 	type,
 }: ZoneGridProps) {
 	const { messages } = useWebSocketStore()
-	console.log('messages', messages)
 	// Check for special rate active status from WebSocket messages
 	const specialActiveZones = useMemo(() => {
 		const activeZones = new Set<string>()

@@ -5,7 +5,6 @@ export const useZones = (gateId?: string) => {
 	return useQuery({
 		queryKey: ['zones', gateId],
 		queryFn: () => api.getZones(gateId),
-		enabled: !!gateId,
 	})
 }
 

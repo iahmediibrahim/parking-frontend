@@ -8,6 +8,7 @@ import {
 	RushHour,
 	Subscription,
 	Ticket,
+	User,
 	Vacation,
 	Zone,
 } from '@/types'
@@ -96,6 +97,29 @@ export const api = {
 	},
 
 	// Admin endpoints
+
+	getEmployees: async (): Promise<User[]> => {
+		const response = await fetch(`${API_BASE_URL}/admin/users`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
+
+		return handleApiError(response) as Promise<User[]>
+	},
+
+	createEmployee: async (data: {
+		username: string
+		password: string
+		role: 'admin' | 'employee'
+	}): Promise<User> => {
+		const response = await fetch(`${API_BASE_URL}/admin/users`, {
+			method: 'POST',
+			headers: getAuthHeaders() as Record<string, string>,
+			body: JSON.stringify(data),
+		})
+
+		return handleApiError(response) as Promise<User>
+	},
+
 	getParkingState: async (): Promise<Zone[]> => {
 		const response = await fetch(
 			`${API_BASE_URL}/admin/reports/parking-state`,
@@ -124,40 +148,27 @@ export const api = {
 		return handleApiError(response)
 	},
 
-	getRushHours: async (): Promise<RushHour[]> => {
-		const response = await fetch(`${API_BASE_URL}/admin/rush-hours`)
-		return handleApiError(response) as Promise<RushHour[]>
-	},
-
 	createRushHour: async (data: Omit<RushHour, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/rush-hours`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
 			body: JSON.stringify(data),
 		})
 		return handleApiError(response)
 	},
 
-	deleteRushHour: async (id: string) => {
-		const response = await fetch(`${API_BASE_URL}/admin/rush-hours/${id}`, {
-			method: 'DELETE',
-		})
-		return handleApiError(response)
-	},
-
 	getVacations: async (): Promise<Vacation[]> => {
-		const response = await fetch(`${API_BASE_URL}/admin/vacations`)
+		const response = await fetch(`${API_BASE_URL}/admin/vacations`, {
+			headers: getAuthHeaders() as Record<string, string>,
+		})
 		return handleApiError(response) as Promise<Vacation[]>
 	},
 
 	createVacation: async (data: Omit<Vacation, 'id'>) => {
 		const response = await fetch(`${API_BASE_URL}/admin/vacations`, {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			headers: getAuthHeaders() as Record<string, string>,
+
 			body: JSON.stringify(data),
 		})
 		return handleApiError(response)

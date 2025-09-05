@@ -55,7 +55,6 @@ export const isTokenExpired = (token: string): boolean => {
 export const getValidAuthData = (): AuthData | null => {
 	const authData = getAuthData()
 	if (!authData) return null
-	console.log('token', authData.token)
 	// Check if token is expired
 	// if (isTokenExpired(authData.token)) { // commented bc token isn't a real token now so the user will always be logged out if this is working rn
 	// 	removeAuthData()
