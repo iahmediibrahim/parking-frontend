@@ -90,13 +90,37 @@ NEXT_PUBLIC_WS_URL=ws://localhost:3000/api/v1/ws
 
 You can adjust the value as needed for your environment.
 
-Then, run the development server:
+### Running the Development Server
 
 ```bash
 pnpm dev
 ```
 
 Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
+
+### Running Tests
+
+To run the test suite:
+
+```bash
+pnpm test
+```
+
+### Building for Production
+
+To build the application for production:
+
+```bash
+pnpm build
+```
+
+### Starting the Production Build
+
+After building, you can start the production server with:
+
+```bash
+pnpm start
+```
 
 ## Learn More
 
