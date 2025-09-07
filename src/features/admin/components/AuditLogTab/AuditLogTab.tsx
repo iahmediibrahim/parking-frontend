@@ -54,24 +54,26 @@ export function AuditLogTab() {
 	}
 
 	return (
-		<div>
-			<div className="flex justify-between items-center mb-4">
+		<div className="w-full">
+			<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
 				<h2 className="text-xl font-semibold">Audit Log</h2>
 
-				<div className="flex items-center space-x-2">
-					<span
-						className={`w-3 h-3 rounded-full ${
-							isConnected ? 'bg-green-500' : 'bg-red-500'
-						}`}
-					/>
-					<span className="text-sm text-gray-500">
-						{isConnected ? 'Connected' : 'Disconnected'}
-					</span>
+				<div className="flex flex-wrap items-center gap-2">
+					<div className="flex items-center">
+						<span
+							className={`w-3 h-3 rounded-full ${
+								isConnected ? 'bg-green-500' : 'bg-red-500'
+							}`}
+						/>
+						<span className="ml-2 text-sm text-gray-500">
+							{isConnected ? 'Connected' : 'Disconnected'}
+						</span>
+					</div>
 
 					<select
 						value={filter}
 						onChange={(e) => setFilter(e.target.value)}
-						className="ml-4 px-3 py-1 border border-gray-300 rounded text-sm"
+						className="px-3 py-1 border border-gray-300 rounded text-sm"
 					>
 						<option value="all">All Actions</option>
 						<option value="category-rates-changed">Rate Changes</option>
@@ -84,7 +86,7 @@ export function AuditLogTab() {
 					{adminUpdates.length > 0 && (
 						<button
 							onClick={() => useWebSocketStore.getState().clearAdminUpdates()}
-							className="ml-2 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
+							className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-sm"
 						>
 							Clear Log
 						</button>
@@ -92,75 +94,77 @@ export function AuditLogTab() {
 				</div>
 			</div>
 
-			{filteredUpdates.length > 0 ? (
-				<div className="overflow-x-auto rounded-lg border border-gray-200">
-					<table className="min-w-full divide-y divide-gray-200">
-						<thead className="bg-gray-50">
-							<tr>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Timestamp
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Admin
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Action
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Target
-								</th>
-								<th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-									Details
-								</th>
-							</tr>
-						</thead>
-						<tbody className="bg-white divide-y divide-gray-200">
-							{filteredUpdates.map((log, index) => (
-								<motion.tr
-									key={`${log.timestamp}-${index}`}
-									initial={{ opacity: 0, y: 10 }}
-									animate={{ opacity: 1, y: 0 }}
-									transition={{ duration: 0.2 }}
-									className="hover:bg-gray-50"
-								>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{new Date(log.timestamp).toLocaleString()}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-										{log.adminId}
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap">
-										<span
-											className={`px-2 py-1 rounded-full text-xs font-medium ${getActionColor(
-												log.action,
-											)}`}
-										>
-											{log.action.replace(/-/g, ' ')}
-										</span>
-									</td>
-									<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-										{log.targetType}: {log.targetId}
-									</td>
-									<td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-										{formatDetails(log.details)}
-									</td>
-								</motion.tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			) : (
-				<div className="text-center py-12 bg-gray-50 rounded-lg">
-					<p className="text-gray-500">
-						{adminUpdates.length === 0
-							? 'No admin actions recorded yet.'
-							: `No actions match the "${filter}" filter.`}
-					</p>
-				</div>
-			)}
+			<div className="w-full overflow-hidden">
+				{filteredUpdates.length > 0 ? (
+					<div className="overflow-x-auto rounded-lg border border-gray-200">
+						<table className="min-w-full divide-y divide-gray-200">
+							<thead className="bg-gray-50">
+								<tr>
+									<th className="px-4 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Timestamp
+									</th>
+									<th className="px-4 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Admin
+									</th>
+									<th className="px-4 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Action
+									</th>
+									<th className="px-4 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Target
+									</th>
+									<th className="px-4 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+										Details
+									</th>
+								</tr>
+							</thead>
+							<tbody className="bg-white divide-y divide-gray-200">
+								{filteredUpdates.map((log, index) => (
+									<motion.tr
+										key={`${log.timestamp}-${index}`}
+										initial={{ opacity: 0, y: 10 }}
+										animate={{ opacity: 1, y: 0 }}
+										transition={{ duration: 0.2 }}
+										className="hover:bg-gray-50"
+									>
+										<td className="px-4 md:px-6 py-4 whitespace-nowrap text-xs md:text-sm text-gray-500">
+											{new Date(log.timestamp).toLocaleString()}
+										</td>
+										<td className="px-4 md:px-6 py-4 whitespace-nowrap text-xs md:text-sm font-medium text-gray-900">
+											{log.adminId}
+										</td>
+										<td className="px-4 md:px-6 py-4 whitespace-nowrap">
+											<span
+												className={`px-2 py-1 rounded-full text-xs font-medium ${getActionColor(
+													log.action,
+												)}`}
+											>
+												{log.action.replace(/-/g, ' ')}
+											</span>
+										</td>
+										<td className="px-4 md:px-6 py-4 whitespace-nowrap text-xs md:text-sm text-gray-500">
+											{log.targetType}: {log.targetId}
+										</td>
+										<td className="px-4 md:px-6 py-4 text-xs md:text-sm text-gray-500 max-w-[200px] md:max-w-xs truncate">
+											{formatDetails(log.details)}
+										</td>
+									</motion.tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				) : (
+					<div className="text-center py-12 bg-gray-50 rounded-lg">
+						<p className="text-gray-500">
+							{adminUpdates.length === 0
+								? 'No admin actions recorded yet.'
+								: `No actions match the "${filter}" filter.`}
+						</p>
+					</div>
+				)}
+			</div>
 
 			{filteredUpdates.length > 0 && (
-				<div className="mt-4 text-sm text-gray-500">
+				<div className="mt-4 text-xs md:text-sm text-gray-500">
 					Showing {filteredUpdates.length} of {adminUpdates.length} total
 					actions
 				</div>

@@ -33,7 +33,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 		await persister.removeClient()
 
 		useWebSocketStore.getState().clearAdminUpdates()
-	},
+
+window.location.href = '/'
+ 	},
 
 	initialize: () => {
 		const authData = getValidAuthData()
