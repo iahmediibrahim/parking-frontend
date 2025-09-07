@@ -1,4 +1,4 @@
-import GateClient from './GateClient'
+import { GateClient } from '@/features'
 
 // Server Component
 export default async function GateScreen({

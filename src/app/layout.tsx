@@ -1,7 +1,11 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
-import { AuthInitializer, Navbar, WebSocketInitializer } from '@/components'
+import {
+	AuthInitializer,
+	Navbar,
+	WebSocketInitializer,
+} from '@/shared/components'
 import Providers from './providers'
 import { Toaster } from 'react-hot-toast'
 

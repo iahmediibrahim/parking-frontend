@@ -1,32 +1,18 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { useAuthStore } from '@/store/authStore'
-import { useWebSocketStore } from '@/store/websocketStore'
 import {
+	AdminUpdateTester,
 	AuditLogTab,
 	ControlPanelTab,
 	EmployeesTab,
 	ParkingStateTab,
-	Tabs,
-} from '@/components'
-import AdminUpdateTester from './AdminUpdateTester'
-import { useAdminWebSocket } from '@/hooks/useAdminWebSocket'
+	useAdminWebSocket,
+	useAuthStore,
+} from '@/features'
+import { Tabs } from '@/shared'
 
 export default function AdminDashboard() {
-	const { isConnected, adminUpdates } = useAdminWebSocket()
+	const {} = useAdminWebSocket()
 	const { user } = useAuthStore()
-	// Log connection status and admin updates
-	useEffect(() => {
-		console.log(
-			`Admin WebSocket status: ${isConnected ? 'Connected' : 'Disconnected'}`,
-		)
-	}, [isConnected])
-
-	useEffect(() => {
-		if (adminUpdates.length > 0) {
-			console.log('Admin updates received:', adminUpdates)
-		}
-	}, [adminUpdates])
 
 	// Redirect if not admin
 	if (user?.role !== 'admin') {

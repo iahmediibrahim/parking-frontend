@@ -1,14 +1,17 @@
 'use client'
 
-import { Loader } from '@/components'
-import { useAuthStore } from '@/store/authStore'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { queryClient, makePersister } from '@/services/queryClient'
-import { useState, useEffect } from 'react'
+import { makePersister, queryClient } from '@/core'
+import { useAuthStore } from '@/features'
+import { Loader } from '@/shared'
+import {
+	Persister,
+	PersistQueryClientProvider,
+} from '@tanstack/react-query-persist-client'
+import { useEffect, useState } from 'react'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
 	const { isLoading } = useAuthStore()
-	const [persister, setPersister] = useState<any>(null)
+	const [persister, setPersister] = useState<Persister | null>(null)
 
 	useEffect(() => {
 		// ✅ runs only on client
