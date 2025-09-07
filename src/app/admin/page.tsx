@@ -52,7 +52,7 @@ export default function AdminDashboard() {
 	return (
 		<div className="bg-white rounded-lg shadow-md p-6 mt-20">
 			<h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
-			<Tabs tabs={tabs} defaultTab="control-panel" />
+			<Tabs tabs={tabs} defaultTab="employees" />
 			<AdminUpdateTester />
 		</div>
 	)
