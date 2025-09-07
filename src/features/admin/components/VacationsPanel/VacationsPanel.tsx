@@ -1,6 +1,7 @@
 'use client'
 
 import { Vacation } from '@/core'
+import { PrimaryButton } from '@/shared'
 import * as motion from 'motion/react-client'
 import React, { useState } from 'react'
 import { useCreateVacation, useVacations } from '../../hooks'
@@ -81,12 +82,11 @@ export function VacationsPanel() {
 						/>
 					</div>
 					<div className="flex items-end">
-						<button
+						<PrimaryButton
 							type="submit"
-							className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
-						>
+ 						>
 							Add Vacation
-						</button>
+						</PrimaryButton>
 					</div>
 				</div>
 			</form>

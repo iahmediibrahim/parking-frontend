@@ -1,6 +1,7 @@
 'use client'
 
 import { RushHour } from '@/core'
+import { PrimaryButton } from '@/shared'
 import * as motion from 'motion/react-client'
 import React, { useState } from 'react'
 import { useCreateRushHour, useRushHours } from '../../hooks'
@@ -95,12 +96,11 @@ export function RushHoursPanel() {
 						/>
 					</div>
 					<div className="flex items-end">
-						<button
+						<PrimaryButton
 							type="submit"
-							className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition-colors"
-						>
+ 						>
 							Add Rush Hour
-						</button>
+						</PrimaryButton>
 					</div>
 				</div>
 			</form>
