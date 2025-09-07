@@ -79,6 +79,17 @@ First, install dependencies:
 pnpm i
 ```
 
+### Environment Variables
+
+Before running the development server, create a `.env` file in the project root with the following content:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api/v1
+NEXT_PUBLIC_WS_URL=ws://localhost:3000/api/v1/ws
+```
+
+You can adjust the value as needed for your environment.
+
 Then, run the development server:
 
 ```bash
