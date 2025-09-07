@@ -7,25 +7,64 @@ This is a [Next.js](https://nextjs.org) project for a parking management system.
 The project follows a feature-based architecture for better organization and maintainability:
 
 ```
-src/
-├── app/                  # Next.js app router pages
-├── components/           # Shared UI components
-├── core/                 # Core utilities and types
-│   ├── api/              # API client and query utilities
-│   ├── types/            # TypeScript type definitions
-│   └── utils/            # Utility functions
-├── features/             # Feature-based modules
-│   ├── admin/            # Admin-related features
-│   ├── auth/             # Authentication features
-│   ├── gates/            # Gate management features
-│   ├── subscriptions/    # Subscription management features
-│   ├── tickets/          # Ticket management features
-│   ├── websocket/        # WebSocket communication features
-│   └── zones/            # Parking zone management features
-└── middleware.ts         # Next.js middleware
+parking-frontend/
+├── .gitignore
+├── .swc/
+│   └── plugins/
+│       └── macos_aarch64_18.0.0/
+├── README.md
+├── eslint.config.mjs
+├── jest.config.js
+├── jest.setup.js
+├── next.config.ts
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── public/
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── src/
+│   ├── app/
+│   │   ├── admin/
+│   │   ├── checkpoint/
+│   │   ├── favicon.ico
+│   │   ├── gate/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── login/
+│   │   ├── page.tsx
+│   │   └── providers.tsx
+│   ├── core/
+│   │   ├── api/
+│   │   ├── index.ts
+│   │   ├── types/
+│   │   ├── utils/
+│   │   └── websocket/
+│   ├── features/
+│   │   ├── admin/
+│   │   ├── auth/
+│   │   ├── checkpoint/
+│   │   ├── gate/
+│   │   └── index.ts
+│   ├── middleware.ts
+│   └── shared/
+│       ├── components/
+│       ├── hooks/
+│       └── index.ts
+└── tsconfig.json
 ```
 
-Each feature directory contains:
+### Key Directories
+- **src/app/**: Next.js app router and main pages
+- **src/core/**: Core utilities, types, API clients, and websocket logic
+- **src/features/**: Feature-based modules (admin, auth, checkpoint, gate, etc.)
+- **src/shared/**: Shared components and hooks
+- **public/**: Static assets (SVGs, icons)
+
+Each feature directory may contain:
 - `components/`: UI components specific to the feature
 - `hooks/`: React hooks for the feature
 - `store/`: State management for the feature (if applicable)
@@ -34,7 +73,13 @@ Each feature directory contains:
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+pnpm i
+```
+
+Then, run the development server:
 
 ```bash
 pnpm dev

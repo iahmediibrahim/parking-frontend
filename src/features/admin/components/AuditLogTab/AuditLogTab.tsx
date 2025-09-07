@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 
 export function AuditLogTab() {
 	const { adminUpdates, isConnected } = useWebSocketStore()
-	console.log('adminUpdatesadminUpdates', adminUpdates)
 	const [filteredUpdates, setFilteredUpdates] = useState<AdminUpdateMessage[]>(
 		[],
 	)

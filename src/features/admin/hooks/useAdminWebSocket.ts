@@ -1,7 +1,6 @@
-'use client'
 import { useWebSocketStore } from '@/core'
-import { useEffect } from 'react'
-
+import React from 'react'
+ 
 export const useAdminWebSocket = () => {
 	const {
 		subscribeToAdmin,
@@ -12,7 +11,7 @@ export const useAdminWebSocket = () => {
 		addDebugMessage,
 	} = useWebSocketStore()
 
-	useEffect(() => {
+	React.useEffect(() => {
 		addDebugMessage('Admin WebSocket hook initialized')
 
 		// Ensure WebSocket is connected
